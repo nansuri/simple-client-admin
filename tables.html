@@ -57,8 +57,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Whoever this is</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -92,11 +91,9 @@
                                             <th>Attend</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Guyu</td>
-                                            <td>Yes</td>
-                                        </tr>
+                                    <tbody class="body-data">
+                                        <td style="display: none"></td>
+                                        <td style="display: none"></td>
                                     </tbody>
                                 </table>
                             </div>
@@ -144,11 +141,36 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" onclick="handleLogout()">Logout</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        setTimeout(function () { //execute this in 0.5s
+            getStatus();
+        }, 100);
+
+        async function getStatus() {
+            await axios.get(configData.env + configData.getDataApi + configData.invitationId, { headers: configData.customHeaders })
+                .then(response => {
+                    console.log('response', response.data.attendeeInfo);
+                    const attendees = response.data.attendeeInfo;
+                    for (i = 0; i < attendees.length; i++) {
+                        $('.body-data').append('<tr><td>' + attendees[i].fullName + '</td><td>' + attendees[i].attend + '</td></tr > ');
+                    };
+                })
+                .catch(error => {
+                    console.log('error', error);
+                });
+        }
+
+        function handleLogout() {
+            localStorage.setItem('token', '');
+            window.location.href = "login.html";
+        }
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -166,6 +188,12 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+
+    <!-- Axios -->
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+
+    <!-- Custom config -->
+    <script src="js/variables.js"></script>
 
 </body>
 

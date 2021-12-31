@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>wearemrged Dashboard - Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -43,15 +43,15 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <input type="email" class="form-control form-control-user" id="inputEmail"
+                                                aria-describedby="emailHelp" placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="inputPassword" placeholder="Password">
                                         </div>
-                                        <a href="tables.html" class="btn btn-primary btn-user btn-block">
+                                        <a class="btn btn-primary btn-user btn-block"
+                                            onclick="handleLogin()">
                                             Login
                                         </a>
                                     </form>
@@ -67,6 +67,24 @@
 
     </div>
 
+    <script>
+        async function handleLogin() {
+            let loginData = {
+                email: document.getElementById('inputEmail').value,
+                password: document.getElementById('inputPassword').value,
+            }
+
+            await axios.post(configData.env + configData.loginApi, loginData, { headers: configData.customHeaders })
+                .then(response => {
+                    localStorage.setItem('token', response.data.access_token);
+                    window.location.href = "tables.html";
+                })
+                .catch(error => {
+                    console.log('error', error);
+                });
+        }
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -76,6 +94,12 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    
+    <!-- Axios -->
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+
+    <!-- Custom config -->
+    <script src="js/variables.js"></script>
 
 </body>
 
