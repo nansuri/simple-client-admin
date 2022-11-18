@@ -78,31 +78,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      localStorage.setItem("token", "");
-      localStorage.setItem("invitation_id", "");
-      async function handleLogin() {
-        let loginData = {
-          email: document.getElementById("inputEmail").value,
-          password: document.getElementById("inputPassword").value,
-        };
-
-        await axios
-          .post(configData.env + configData.loginApi, loginData, {
-            headers: configData.customHeaders,
-          })
-          .then((response) => {
-            localStorage.setItem("token", response.data.tokenData.accessToken);
-            localStorage.setItem("invitation_id", response.data.userData.invitationOwnerId);
-            window.location.href = "tables.html";
-          })
-          .catch((error) => {
-            console.log("error", error);
-          });
-      }
-    </script>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -118,5 +93,29 @@
 
     <!-- Custom config -->
     <script src="js/variables.js"></script>
+
+    <script>
+      localStorage.setItem("token", "");
+      localStorage.setItem("invitation_id", "");
+      async function handleLogin() {
+        let loginData = {
+          email: document.getElementById("inputEmail").value,
+          password: document.getElementById("inputPassword").value,
+        };
+
+        await axios.post(configData.env + configData.loginApi, loginData, { headers: configData.customHeaders })
+          .then((response) => {
+            localStorage.setItem("token", response.data.tokenData.accessToken);
+            localStorage.setItem("invitation_id", response.data.userData.invitationOwnerId);
+            window.location.href = "tables.html";
+          })
+          .catch((error) => {
+            if (error.response.data.errorDetails.errorMessage) {
+              alert(error.response.data.errorDetails.errorMessage);
+            }
+            console.log("error", error.response.data.errorDetails.errorMessage);
+          });
+      }
+    </script>
   </body>
 </html>
