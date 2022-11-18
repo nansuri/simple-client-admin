@@ -1,8 +1,8 @@
 var exports = {};
 const configData = {
-    env: 'https://nansuri.tunnelto.dev/',
-    loginApi: 'apis/user/login',
-    getDataApi: 'apis/invitation/attendee/query?invitationid=',
+    env: 'https://api.sedang.live/wam/',
+    loginApi: 'auth/login',
+    getDataApi: 'invitation/attendees?invitationId=',
     invitationId: localStorage.getItem('invitation_id') ,
     customHeaders: {
         'Content-Type': 'application/json',
